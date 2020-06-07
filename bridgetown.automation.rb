@@ -57,34 +57,14 @@ def add_template_repository_to_source_path
   end
 end
 
-def add_yarn_packages
-  packages = 'cypress start-server-and-test'
-  say "Adding the following yarn packages: #{packages}", :green
-  system("yarn add -D #{packages}")
-end
-
 def read_template_file(filename)
   File.read(File.join(determine_template_dir, filename))
 end
 
-def add_cypress_json
-  cypress_json = 'cypress.json'
-  create_file(cypress_json, read_template_file(cypress_json))
-end
+def add_default_capybara
+  capybara_dir = 'system'
 
-def add_cypress_scripts
-  cypress_scripts = read_template_file('cypress_scripts')
-  package_json = 'package.json'
-
-  script_regex = /"scripts": {(\s+".*,?)*/
-
-  inject_into_file(package_json, ",\n" + cypress_scripts, after: script_regex)
-end
-
-def add_default_cypress_directory
-  cypress_dir = "cypress"
-
-  directory(File.join(determine_template_dir, cypress_dir), cypress_dir)
+  directory(File.join(determine_template_dir, capybara_dir), capybara_dir)
 end
 
 add_template_repository_to_source_path
