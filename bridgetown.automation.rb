@@ -60,14 +60,6 @@ def read_template_file(filename)
   File.read(File.join(determine_template_dir, filename))
 end
 
-def add_default_capybara
-  capybara_dir = 'system'
-
-  directory(File.join(determine_template_dir, capybara_dir), capybara_dir)
-end
+def add_capybara_to_bundle; end
 
 add_template_repository_to_source_path
-add_cypress_scripts
-add_cypress_json
-add_default_cypress_directory
-add_yarn_packages
