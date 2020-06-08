@@ -13,5 +13,6 @@ module CapybaraAutomation
       test: 1,
       spec: 2
     }.invert
+    def initialize; end
   end
 end
