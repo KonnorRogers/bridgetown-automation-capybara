@@ -1,4 +1,0 @@
-<% if @test_unit %>
-<% elsif @rspec %>
-<% elsif @minitest %>
-<% end %>

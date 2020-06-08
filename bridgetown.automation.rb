@@ -3,11 +3,6 @@
 require 'fileutils'
 require 'shellwords'
 
-gemfile do
-  source 'https://rubygems.org'
-  gem '', '~> `:'
-end
-
 # Dynamically determined due to having to load from the tempdir
 @current_dir = File.expand_path(__dir__)
 
