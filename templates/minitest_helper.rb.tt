@@ -1,4 +1,4 @@
-require '<%= @test_preference %>_helper'
+require '<%= @naming_convention %>_helper'
 require 'capybara/minitest'
 
 class CapybaraTestCase < Minitest::Test

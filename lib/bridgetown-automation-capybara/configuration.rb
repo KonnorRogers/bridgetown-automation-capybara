@@ -13,6 +13,12 @@ module CapybaraAutomation
       test: 1,
       spec: 2
     }.invert
-    def initialize; end
+
+    attr_accessor :framework, :naming_convention
+
+    def initialize
+      @framework = :minitest
+      @naming_convention = :test
+    end
   end
 end

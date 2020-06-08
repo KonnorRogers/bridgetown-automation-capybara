@@ -1,0 +1,9 @@
+<% require 'erb' %>
+
+<% if @framework == :minitest %>
+  <%= ERB.new(File.read("./minitest_helper.rb.tt")) %>
+<% elsif @framework == :rspec %>
+  <%= ERB.new(File.read("./rspec_helper.rb.tt")) %>
+<% elsif @framework == :test_unit %>
+  <%= ERB.new(File.read("./test_unit_helper.rb.tt")) %>
+<% end %>
