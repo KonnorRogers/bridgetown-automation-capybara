@@ -14,6 +14,8 @@ ROOT_PATH = if __FILE__ =~ %r{\Ahttps?://}
               File.expand_path(__dir__)
             end
 
+puts ROOT_PATH
+
 DIR_NAME = File.basename(ROOT_PATH)
 
 GITHUB_PATH = "https://github.com/ParamagicDev/#{DIR_NAME}.git"
@@ -22,14 +24,10 @@ def determine_template_dir(current_dir = @current_dir)
   File.join(current_dir, 'templates')
 end
 
-def require_files(tmpdir = nil)
-  files = Dir.glob('lib/**/*')
-
-  return if files.empty?
-
-  return files.each { |file| require File.expand_path(file) } if tmpdir.nil?
-
-  files.each { |file| require File.join(tmpdir, File.expand_path(file)) }
+def require_libs
+  source_paths.each do |path|
+    Dir["#{path}/lib/*.rb"].sort.each { |file| require file }
+  end
 end
 
 # Copied from: https://github.com/mattbrictson/rails-template
@@ -47,12 +45,10 @@ def add_template_repository_to_source_path
 
     if (branch = __FILE__[%r{#{DIR_NAME}/(.+)/bridgetown.automation.rb}, 1])
       Dir.chdir(tempdir) { system("git checkout #{branch}") }
-      require_files(tempdir)
       @current_dir = File.expand_path(tempdir)
     end
   else
-    source_paths.unshift(DIR_NAME)
-    require_files
+    source_paths.unshift(ROOT_PATH)
   end
 end
 
@@ -60,6 +56,74 @@ def read_template_file(filename)
   File.read(File.join(determine_template_dir, filename))
 end
 
-def add_capybara_to_bundle; end
+def add_capybara_to_bundle
+  gems = %w[capybara apparition]
+
+  gems.each do |new_gem|
+    if Bundler.gem(new_gem)
+      say "You already have #{new_gem} installed.", :red
+      say 'Skipping...\n', :red
+      next
+    end
+
+    run "bundle add #{gem} -g 'testing'"
+  end
+end
+
+def do_bundle
+  Bundler.with_clean_env { run 'bundle install' }
+end
+
+def ask_questions(config)
+  ask_for_testing_framework(config)
+  ask_for_naming_convention(config)
+end
+
+def ask_for_input(question, answers)
+  answer = nil
+
+  provide_input = "Please provide a number (1-#{answers.length})"
+  say(provide_input, :blue)
+
+  allowable_answers = answers.keys
+  loop do
+    say question.to_s
+    answers.each { |num, string| say "#{num}.) #{string}", :cyan }
+    answer = ask(provide_input + ":\n ").strip.to_i
+
+    return answer if allowable_answers.include?(answer)
+
+    say "\nInvalid input given", :red
+  end
+end
+
+def ask_for_testing_framework(config)
+  question = 'What testing framework would you like to use?'
+
+  answers = config.frameworks
+
+  input = ask_for_input(question, answers)
+
+  config.framework = answers[input]
+end
+
+def ask_for_naming_convention(config)
+  question = 'What naming convention would you like use?'
+
+  answers = config.naming_conventions
+
+  input = ask_for_input(question, answers)
+
+  config.naming_convention = answers[input]
+end
 
 add_template_repository_to_source_path
+require_libs
+
+config = CapybaraAutomation::Configuration.new
+
+add_capybara_to_bundle
+do_bundle
+ask_questions(config)
+
+p config

@@ -1,9 +1,17 @@
 <% require 'erb' %>
+<%= require "'#{@naming_convention}'_helper" %>
+require 'capybara/apparition'
+
+Capybara.register_driver :apparition do |app|
+  Capybara::Apparition::Driver.new(app, options)
+end
+
+Capybara.javascript_driver = :apparition
 
 <% if @framework == :minitest %>
-  <%= ERB.new(File.read("./minitest_helper.rb.tt")) %>
+  <%= ERB.new(File.read("minitest_helper.rb.tt")) %>
 <% elsif @framework == :rspec %>
-  <%= ERB.new(File.read("./rspec_helper.rb.tt")) %>
+  <%= ERB.new(File.read("rspec_helper.rb.tt")) %>
 <% elsif @framework == :test_unit %>
-  <%= ERB.new(File.read("./test_unit_helper.rb.tt")) %>
+  <%= ERB.new(File.read("test_unit_helper.rb.tt")) %>
 <% end %>

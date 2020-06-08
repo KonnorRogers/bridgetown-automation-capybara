@@ -20,5 +20,13 @@ module CapybaraAutomation
       @framework = :minitest
       @naming_convention = :test
     end
+
+    def frameworks
+      FRAMEWORKS
+    end
+
+    def naming_conventions
+      NAMING_CONVENTION
+    end
   end
 end
