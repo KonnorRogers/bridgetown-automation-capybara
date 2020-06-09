@@ -122,8 +122,8 @@ require_libs
 
 config = CapybaraAutomation::Configuration.new
 
-add_capybara_to_bundle
 do_bundle
+add_capybara_to_bundle
 ask_questions(config)
 
 p config

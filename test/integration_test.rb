@@ -4,7 +4,6 @@ require 'test_helper'
 require 'bundler'
 
 GITHUB_REPO_NAME = 'bridgetown-automation-capybara'
-CURRENT_BRIDGETOWN_VERSION = '~> 0.15.0.beta3'
 BRANCH = `git branch --show-current`.chomp.freeze || 'master'
 
 class IntegrationTest < Minitest::Test
@@ -27,7 +26,7 @@ class IntegrationTest < Minitest::Test
     Rake.cd TEST_APP
 
     # Rake.sh("bridgetown new . --force --apply='../bridgetown.automation.rb'")
-    Rake.sh('bridgetown ../bridgetown.automation.rb')
+    Bundler.with_clean_env { Rake.sh('bridgetown apply "../bridgetown.automation.rb"') }
   end
 
   # Have to push to github first, and wait for github to update

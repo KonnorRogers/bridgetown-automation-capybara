@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ -d test_app ]]; then
+  rm -rf test_app
+fi
+
+mkdir -p test_app
+cd test_app
+gem install bridgetown -v '0.15.0.beta3'
+bridgetown new . --force
+bundle exec bridgetown apply ../bridgetown.automation.rb
