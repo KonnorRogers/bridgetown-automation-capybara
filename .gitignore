@@ -34,4 +34,4 @@ yarn-debug.log*
 # Yarn Integrity file
 .yarn-integrity
 test_app
-
+.git
