@@ -3,7 +3,9 @@
 require 'minitest'
 require 'minitest/autorun'
 require 'rake'
-require 'bridgetown-automation-cypress'
+
+LIB_NAME = 'bridgetown-automation-capybara'
+require LIB_NAME
 
 ROOT_DIR = File.expand_path('..', __dir__)
 
