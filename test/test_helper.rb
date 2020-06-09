@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-### INLINE GEMFILE
-require 'bundler/inline'
-
-gemfile do
-end
-### END
-
 require 'minitest'
 require 'minitest/autorun'
 require 'rake'

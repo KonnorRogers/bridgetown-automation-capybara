@@ -8,7 +8,7 @@ BRANCH = `git branch --show-current`.chomp.freeze || 'master'
 
 class IntegrationTest < Minitest::Test
   def setup
-    # Rake.rm_rf(TEST_APP)
+    Rake.rm_rf(TEST_APP)
     Rake.mkdir_p(TEST_APP)
   end
 
@@ -23,10 +23,9 @@ class IntegrationTest < Minitest::Test
   def run_assertions; end
 
   def test_it_works_with_local_automation
-    Rake.cd TEST_APP
+    Dir.chdir(TEST_APP)
 
-    # Rake.sh("bridgetown new . --force --apply='../bridgetown.automation.rb'")
-    Bundler.with_clean_env { Rake.sh('bridgetown apply "../bridgetown.automation.rb"') }
+    system("bridgetown new . --force --apply='../bridgetown.automation.rb'")
   end
 
   # Have to push to github first, and wait for github to update

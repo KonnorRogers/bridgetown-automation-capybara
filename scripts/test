@@ -10,4 +10,5 @@ mkdir -p test_app
 cd test_app
 gem install bridgetown -v '0.15.0.beta3'
 bridgetown new . --force
+bundle install
 bundle exec bridgetown apply ../bridgetown.automation.rb
