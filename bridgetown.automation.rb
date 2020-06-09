@@ -58,15 +58,17 @@ end
 
 def add_capybara_to_bundle
   gems = %w[capybara apparition]
+  run 'bundle config --local build.nokogiri --use-system-libraries'
 
   gems.each do |new_gem|
-    if `bundle check #{new_gem}`
+    # Redirect to /dev/null so we dont clutter stdout
+    if system(`bundle info #{new_gem} 1> /dev/null`)
       say "You already have #{new_gem} installed.", :red
       say 'Skipping...\n', :red
       next
     end
 
-    run "bundle add #{gem} -g 'testing'"
+    run "bundle add #{new_gem} -g 'testing'"
   end
 end
 
@@ -83,13 +85,12 @@ def ask_for_input(question, answers)
   answer = nil
 
   provide_input = "Please provide a number (1-#{answers.length})"
-  say(provide_input, :blue)
 
   allowable_answers = answers.keys
   loop do
-    say question.to_s
+    say "\n#{question}"
     answers.each { |num, string| say "#{num}.) #{string}", :cyan }
-    answer = ask(provide_input + ":\n ").strip.to_i
+    answer = ask("\n#{provide_input}:\n ", :magenta).strip.to_i
 
     return answer if allowable_answers.include?(answer)
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'bundler'
+require 'shell'
 
 GITHUB_REPO_NAME = 'bridgetown-automation-capybara'
 BRANCH = `git branch --show-current`.chomp.freeze || 'master'
@@ -24,8 +24,7 @@ class IntegrationTest < Minitest::Test
 
   def test_it_works_with_local_automation
     Dir.chdir(TEST_APP)
-
-    system("bridgetown new . --force --apply='../bridgetown.automation.rb'")
+    system('bundle exec bridgetown new . --force --apply="../bridgetown.automation.rb"')
   end
 
   # Have to push to github first, and wait for github to update
