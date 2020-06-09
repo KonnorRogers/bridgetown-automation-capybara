@@ -57,18 +57,17 @@ def read_template_file(filename)
 end
 
 def add_capybara_to_bundle
-  run 'bundle add capybara'
-  # gems = %w[capybara apparition]
+  gems = %w[capybara apparition]
 
-  # gems.each do |new_gem|
-  #   if Bundler.gem(new_gem)
-  #     say "You already have #{new_gem} installed.", :red
-  #     say 'Skipping...\n', :red
-  #     next
-  #   end
+  gems.each do |new_gem|
+    if `bundle check #{new_gem}`
+      say "You already have #{new_gem} installed.", :red
+      say 'Skipping...\n', :red
+      next
+    end
 
-  #   run "bundle add #{gem} -g 'testing'"
-  # end
+    run "bundle add #{gem} -g 'testing'"
+  end
 end
 
 def do_bundle
