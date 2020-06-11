@@ -121,14 +121,14 @@ def copy_capybara_file(config)
   dest = config.naming_convention
   src = File.join(ROOT_PATH, 'templates', 'capybara_helper.rb.tt')
 
-  template(dest, src)
+  template(src, dest)
 end
 
 add_template_repository_to_source_path
 require_libs
 
-add_capybara_to_bundle
-do_bundle
+# add_capybara_to_bunde
+# do_bundle
 ask_questions(config)
 
 copy_capybara_file(config)
