@@ -14,8 +14,6 @@ ROOT_PATH = if __FILE__ =~ %r{\Ahttps?://}
               File.expand_path(__dir__)
             end
 
-puts ROOT_PATH
-
 DIR_NAME = File.basename(ROOT_PATH)
 
 GITHUB_PATH = "https://github.com/ParamagicDev/#{DIR_NAME}.git"
@@ -58,7 +56,8 @@ end
 
 def add_capybara_to_bundle
   gems = %w[capybara apparition]
-  run 'bundle config --local build.nokogiri --use-system-libraries'
+
+  run('bundle config --local build.nokogiri --use-system-libraries')
 
   gems.each do |new_gem|
     # Redirect to /dev/null so we dont clutter stdout
@@ -68,7 +67,7 @@ def add_capybara_to_bundle
       next
     end
 
-    run "bundle add #{new_gem} -g 'testing'"
+    Bundler.with_original_env { "bundle add #{new_gem} -g 'testing'" }
   end
 end
 
@@ -118,14 +117,19 @@ def ask_for_naming_convention(config)
   config.naming_convention = answers[input]
 end
 
+def copy_capybara_file(config)
+  dest = config.naming_convention
+  src = File.join(ROOT_PATH, 'templates', 'capybara_helper.rb.tt')
+
+  template(dest, src)
+end
+
 add_template_repository_to_source_path
 require_libs
 
-config = CapybaraAutomation::Configuration.new
-
 add_capybara_to_bundle
-# run "bundle add capybara -g 'testing'"
-# do_bundle
+do_bundle
 ask_questions(config)
 
+copy_capybara_file(config)
 p config

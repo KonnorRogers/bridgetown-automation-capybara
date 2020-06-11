@@ -23,8 +23,11 @@ class IntegrationTest < Minitest::Test
   def run_assertions; end
 
   def test_it_works_with_local_automation
-    Dir.chdir(TEST_APP)
-    system('bundle exec bridgetown new . --force --apply="../bridgetown.automation.rb"')
+    Rake.cd TEST_APP
+
+    Bundler.with_original_env do
+      Rake.sh("bundle exec bridgetown new . --force --apply '../bridgetown.automation.rb'")
+    end
   end
 
   # Have to push to github first, and wait for github to update
