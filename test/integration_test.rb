@@ -25,9 +25,10 @@ class IntegrationTest < Minitest::Test
   def test_it_works_with_local_automation
     Rake.cd TEST_APP
 
-    Bundler.with_original_env do
-      Rake.sh("bundle exec bridgetown new . --force --apply '../bridgetown.automation.rb'")
-    end
+    Rake.sh('bundle exec bridgetown new . --force ')
+    Rake.sh('bundle config --local build.nokogiri --use-system-libraries')
+    Rake.sh('bundle install')
+    Rake.sh("bridgetown apply '../bridgetown.automation.rb'")
   end
 
   # Have to push to github first, and wait for github to update

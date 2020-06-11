@@ -57,22 +57,16 @@ end
 def add_capybara_to_bundle
   gems = %w[capybara apparition]
 
-  run('bundle config --local build.nokogiri --use-system-libraries')
-
   gems.each do |new_gem|
     # Redirect to /dev/null so we dont clutter stdout
-    if system(`bundle info #{new_gem} 1> /dev/null`)
+    if system("bundle info #{new_gem} 1> /dev/null")
       say "You already have #{new_gem} installed.", :red
       say 'Skipping...\n', :red
       next
     end
 
-    Bundler.with_original_env { "bundle add #{new_gem} -g 'testing'" }
+    system("bundle add #{new_gem} -g 'testing'")
   end
-end
-
-def do_bundle
-  Bundler.with_unbundled_env { run 'bundle install' }
 end
 
 def ask_questions(config)
@@ -118,18 +112,24 @@ def ask_for_naming_convention(config)
 end
 
 def copy_capybara_file(config)
-  dest = config.naming_convention
+  FileUtils.mkdir_p(config.naming_convention.to_s)
+  dest = File.join(config.naming_convention.to_s, 'capybara_helper.rb')
   src = File.join(ROOT_PATH, 'templates', 'capybara_helper.rb.tt')
 
+  @framework = config.framework
+  @naming_convention = config.naming_convention
   template(src, dest)
 end
 
 add_template_repository_to_source_path
 require_libs
 
-# add_capybara_to_bunde
-# do_bundle
+config = CapybaraAutomation::Configuration.new
+# add_capybara_to_bundle
+# run 'bundle install'
 ask_questions(config)
 
 copy_capybara_file(config)
+p @framework
+p @naming_convention
 p config
