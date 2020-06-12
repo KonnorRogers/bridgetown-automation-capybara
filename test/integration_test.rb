@@ -8,8 +8,6 @@ BRANCH = `git branch --show-current`.chomp.freeze || 'master'
 
 module CapybaraAutomation
   class IntegrationTest < Minitest::Test
-    include IoTestHelpers
-
     def setup
       Rake.rm_rf(TEST_APP)
       Rake.mkdir_p(TEST_APP)
