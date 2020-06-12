@@ -70,8 +70,8 @@ def add_capybara_to_bundle
 end
 
 def ask_questions(config)
-  ask_for_testing_framework(config)
-  ask_for_naming_convention(config)
+  ask_for_testing_framework(config) if config.framework.nil?
+  ask_for_naming_convention(config) if config.naming_convention.nil?
 end
 
 def ask_for_input(question, answers)
@@ -121,15 +121,17 @@ def copy_capybara_file(config)
   template(src, dest)
 end
 
+def create_config
+  CapybaraAutomation::Configuration.new
+end
+
 add_template_repository_to_source_path
 require_libs
 
-config = CapybaraAutomation::Configuration.new
+p ask.callee[0]
+@config = create_config
 # add_capybara_to_bundle
 # run 'bundle install'
-ask_questions(config)
+ask_questions(@config)
 
-copy_capybara_file(config)
-p @framework
-p @naming_convention
-p config
+copy_capybara_file(@config)

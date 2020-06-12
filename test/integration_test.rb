@@ -2,6 +2,8 @@
 
 require 'test_helper'
 require 'shell'
+require 'bridgetown-core'
+require 'thor'
 
 GITHUB_REPO_NAME = 'bridgetown-automation-capybara'
 BRANCH = `git branch --show-current`.chomp.freeze || 'master'
@@ -28,11 +30,12 @@ module CapybaraAutomation
       Rake.sh('bundle config --local build.nokogiri --use-system-libraries')
       Rake.sh('bundle install')
 
-      rspec = '1'
-      spec_convention = '2'
-      exe = "bridgetown apply '../bridgetown.automation.rb'"
+      config = Configuration.new
 
-      simulate_stdin(exe, rspec, spec_convention)
+      config.framework = :rspec
+      config.naming_convention = :spec
+
+      Rake.sh('bridgetown apply ../bridgetown.automation.rb')
 
       capybara_helper_file = read_test_file('capybara_helper.rb')
       rspec_helper_file = read_template_file('rspec_helper.rb.tt')

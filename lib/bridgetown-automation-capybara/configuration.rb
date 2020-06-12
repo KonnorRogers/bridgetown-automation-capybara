@@ -17,8 +17,8 @@ module CapybaraAutomation
     attr_accessor :framework, :naming_convention
 
     def initialize
-      @framework = :minitest
-      @naming_convention = :test
+      @framework = nil
+      @naming_convention = nil
     end
 
     def frameworks
