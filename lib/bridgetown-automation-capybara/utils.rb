@@ -8,5 +8,7 @@ module CapybaraAutomation
 
       false
     end
+
+    private
   end
 end

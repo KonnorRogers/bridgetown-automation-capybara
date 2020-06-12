@@ -5,5 +5,3 @@ gem 'minitest'
 gem 'rake'
 gem 'rubocop'
 
-
-gem "nokogiri", "~> 1.10"
