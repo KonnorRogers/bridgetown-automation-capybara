@@ -45,7 +45,7 @@ module CapybaraAutomation
 
     def run_assertions(framework:, naming_convention:)
       helper_file = read_template_file("#{framework}_helper.rb.tt")
-      capybara_helper_file = read_test_file(File.join(naming_convention, 'capybara_helper.rb'))
+      capybara_helper_file = read_test_file(File.join(naming_convention.to_s, 'capybara_helper.rb'))
 
       assert_match(/#{helper_file}/, capybara_helper_file)
     end
@@ -65,23 +65,23 @@ module CapybaraAutomation
     end
 
     # Have to push to github first, and wait for github to update
-    def test_it_works_with_remote_automation
-      Rake.cd TEST_APP
+    # def test_it_works_with_remote_automation
+    #   Rake.cd TEST_APP
 
-      github_url = 'https://github.com'
-      user_and_reponame = "ParamagicDev/#{GITHUB_REPO_NAME}/tree/#{BRANCH}"
+    #   github_url = 'https://github.com'
+    #   user_and_reponame = "ParamagicDev/#{GITHUB_REPO_NAME}/tree/#{BRANCH}"
 
-      file = 'bridgetown.automation.rb'
+    #   file = 'bridgetown.automation.rb'
 
-      url = "#{github_url}/#{user_and_reponame}/#{file}"
+    #   url = "#{github_url}/#{user_and_reponame}/#{file}"
 
-      minitest = '2' # => :minitest
-      test = '1' # => :test
+    #   minitest = '2' # => :minitest
+    #   test = '1' # => :test
 
-      run_pre_bundle_commands
-      run_command("bundle exec bridgetown new . --force --apply='#{url}'", minitest, test)
+    #   run_pre_bundle_commands
+    #   run_command("bundle exec bridgetown new . --force --apply='#{url}'", minitest, test)
 
-      run_assertions(framework: :minitest, naming_convention: :test)
-    end
+    #   run_assertions(framework: :minitest, naming_convention: :test)
+    # end
   end
 end

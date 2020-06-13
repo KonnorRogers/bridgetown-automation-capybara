@@ -1,7 +1,7 @@
 <% require 'erb' -%>
-<% TEMPLATE_DIR = File.expand_path(__dir__) -%>
+<% @template_dir = File.expand_path(__dir__) -%>
 <% def read(filename)
-  ERB.new(File.read(File.join(TEMPLATE_DIR, filename))).result(binding)
+  ERB.new(File.read(File.join(@template_dir, filename))).result(binding)
 end -%>
 require '<%= @naming_convention %>_helper'
 require 'capybara/apparition'
@@ -11,6 +11,7 @@ Capybara.register_driver :apparition do |app|
 end
 
 Capybara.javascript_driver = :apparition
+Capybara.app_host = "http://localhost:4001"
 
 <% if @framework == :minitest -%>
 <%= read("minitest_helper.rb.tt") %>

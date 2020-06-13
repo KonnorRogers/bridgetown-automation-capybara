@@ -62,6 +62,10 @@ def add_capybara_to_bundle
 
   gems = [capybara, apparition]
 
+  append_gems_to_gemfile(gems)
+end
+
+def append_gems_to_gemfile(gems)
   gems.each do |new_gem|
     # Redirect to /dev/null so we dont clutter stdout
     if system("bundle info #{new_gem.name} 1> /dev/null")
@@ -80,17 +84,32 @@ def copy_capybara_file(config)
   dest = File.join(config.naming_convention.to_s, 'capybara_helper.rb')
   src = File.join(ROOT_PATH, 'templates', 'capybara_helper.rb.tt')
 
-  @framework = config.framework
-  @naming_convention = config.naming_convention
   template(src, dest)
+end
+
+def copy_examples(config)
+  name = config.naming_convention.to_s
+  # Create an integration directory
+  dest_dir = File.join(name, 'integration')
+  dest_file = File.join(dest_dir, "navbar_#{name}.rb")
+  src_file = File.join(ROOT_PATH, 'templates', 'integration', 'navbar_test.rb')
+
+  FileUtils.mkdir_p(dest_dir)
+  template(src_file, dest_file)
 end
 
 add_template_repository_to_source_path
 require_libs
 
 @config = CapybaraAutomation::Configuration.new
+
 add_capybara_to_bundle
 run 'bundle install'
 @config.ask_questions
 
+# Set these so we can use them in our templates
+@framework = @config.framework
+@naming_convention = @config.naming_convention
+
 copy_capybara_file(@config)
+copy_examples(@config)
