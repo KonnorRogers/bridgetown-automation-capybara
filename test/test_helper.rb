@@ -2,6 +2,8 @@
 
 require 'minitest'
 require 'minitest/autorun'
+require 'minitest/unit'
+require 'mocha/minitest'
 require 'rake'
 
 LIB_NAME = 'bridgetown-automation-capybara'

@@ -54,61 +54,25 @@ def read_template_file(filename)
   File.read(File.join(determine_template_dir, filename))
 end
 
+AutomationGem = Struct.new(:name, :version)
+
 def add_capybara_to_bundle
-  gems = %w[capybara apparition]
+  capybara = AutomationGem.new('capybara', '~> 3.3')
+  apparition = AutomationGem.new('apparition', '~> 0.5')
+
+  gems = [capybara, apparition]
 
   gems.each do |new_gem|
     # Redirect to /dev/null so we dont clutter stdout
-    if system("bundle info #{new_gem} 1> /dev/null")
+    if system("bundle info #{new_gem.name} 1> /dev/null")
       say "You already have #{new_gem} installed.", :red
       say 'Skipping...\n', :red
       next
     end
 
-    system("bundle add #{new_gem} -g 'testing'")
+    data = "\ngem '#{new_gem.name}', '#{new_gem.version}', group: :bridgetown_plugins"
+    append_to_file('Gemfile', data)
   end
-end
-
-def ask_questions(config)
-  ask_for_testing_framework(config) if config.framework.nil?
-  ask_for_naming_convention(config) if config.naming_convention.nil?
-end
-
-def ask_for_input(question, answers)
-  answer = nil
-
-  provide_input = "Please provide a number (1-#{answers.length})"
-
-  allowable_answers = answers.keys
-  loop do
-    say "\n#{question}"
-    answers.each { |num, string| say "#{num}.) #{string}", :cyan }
-    answer = ask("\n#{provide_input}:\n ", :magenta).strip.to_i
-
-    return answer if allowable_answers.include?(answer)
-
-    say "\nInvalid input given", :red
-  end
-end
-
-def ask_for_testing_framework(config)
-  question = 'What testing framework would you like to use?'
-
-  answers = config.frameworks
-
-  input = ask_for_input(question, answers)
-
-  config.framework = answers[input]
-end
-
-def ask_for_naming_convention(config)
-  question = 'What naming convention would you like use?'
-
-  answers = config.naming_conventions
-
-  input = ask_for_input(question, answers)
-
-  config.naming_convention = answers[input]
 end
 
 def copy_capybara_file(config)
@@ -121,17 +85,12 @@ def copy_capybara_file(config)
   template(src, dest)
 end
 
-def create_config
-  CapybaraAutomation::Configuration.new
-end
-
 add_template_repository_to_source_path
 require_libs
 
-p ask.callee[0]
-@config = create_config
-# add_capybara_to_bundle
-# run 'bundle install'
-ask_questions(@config)
+@config = CapybaraAutomation::Configuration.new
+add_capybara_to_bundle
+run 'bundle install'
+@config.ask_questions
 
 copy_capybara_file(@config)
