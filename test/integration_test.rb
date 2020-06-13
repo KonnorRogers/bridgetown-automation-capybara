@@ -79,7 +79,7 @@ module CapybaraAutomation
       test = '1' # => :test
 
       run_pre_bundle_commands
-      run_command("bundle exec bridgetown new . --force --apply='#{url}'")
+      run_command("bundle exec bridgetown new . --force --apply='#{url}'", minitest, test)
 
       run_assertions(framework: :minitest, naming_convention: :test)
     end
