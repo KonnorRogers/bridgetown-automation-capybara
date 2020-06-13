@@ -2,9 +2,10 @@
 
 require 'test_helper'
 require 'shell'
+require 'open3'
 # require 'bridgetown-core'
-require 'readline'
-# require 'thor'
+# require 'readline'
+require 'thor'
 
 GITHUB_REPO_NAME = 'bridgetown-automation-capybara'
 BRANCH = `git branch --show-current`.chomp.freeze || 'master'
@@ -37,12 +38,9 @@ module CapybaraAutomation
       config.naming_convention = :spec
       list = %w[1 2]
 
-      # mock = Minitest::Mock.new
-      # Thor::LineEditor.new
+      o, e, s = Open3.capture3('bridgetown apply ../bridgetown.automation.rb', stdin_data: "1\n2\n")
 
-      Readline.stub(:readline, proc { list.shift }) do
-        Rake.sh('bridgetown apply ../bridgetown.automation.rb')
-      end
+      puts o
 
       # capybara_helper_file = read_test_file('capybara_helper.rb')
       # rspec_helper_file = read_template_file('rspec_helper.rb.tt')
