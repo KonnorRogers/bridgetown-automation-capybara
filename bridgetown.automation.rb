@@ -74,7 +74,7 @@ def append_gems_to_gemfile(gems)
       next
     end
 
-    data = "\ngem '#{new_gem.name}', '#{new_gem.version}', group: :bridgetown_plugins"
+    data = "\ngem '#{new_gem.name}', '#{new_gem.version}'"
     append_to_file('Gemfile', data)
   end
 end
